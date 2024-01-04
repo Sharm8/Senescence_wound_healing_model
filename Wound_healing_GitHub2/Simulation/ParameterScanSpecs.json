@@ -1,0 +1,18 @@
+{
+    "version": "4.3.2",
+    "parameter_list": {
+        
+        "senescence_percentage_param":{
+            "values":[0.15,0.73,0.90,1]
+        },
+        "Induction_time":{
+            "values":[0,20000,40000,55000]
+        
+        }
+    }
+}
+
+
+
+
+
