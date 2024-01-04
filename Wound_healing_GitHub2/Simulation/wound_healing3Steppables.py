@@ -189,7 +189,7 @@ class MechanismsSteppable(SteppableBasePy):
                                     
                         else:
                             # During the proliferative phase of wound healing
-                            if mcs < 40000:                                                                                                                                            
+                            if mcs < 40000:    # code for parameter scan # mcs > {{Induction_time}}                                                                                                                                        
                                 neighbour_list = self.get_cell_neighbor_data_list(cell) 
                                 common_area_with_ECM = neighbour_list.common_surface_area_with_cell_types(cell_type_list=[self.ECM])
                                 # CCN1-mediated myofibroblast differentiation
