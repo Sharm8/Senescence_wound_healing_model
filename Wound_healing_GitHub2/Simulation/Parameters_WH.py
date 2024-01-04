@@ -13,7 +13,7 @@ CSF_thr                = 3.2847e+00 # min:2.0 max:5.0##
 
 
 Fib_actF_myoF_chance = .20
-senescence_percentage_param = .15
+senescence_percentage_param = .15 # code for parameter scan # {{senescence_percentage_param}}
 
 
 vox_to_um = 3
