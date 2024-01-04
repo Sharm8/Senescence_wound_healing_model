@@ -9,4 +9,5 @@
    <Resource Type="Data">Simulation/wound_closure_rate.csv</Resource>
    <Resource Type="Python">Simulation/Parameters_WH.py</Resource>
    <Resource Type="Python">Simulation/wound_healing3Steppables.py</Resource>
+   <!-- ParameterScan Type="ParameterScan">Simulation/ParameterScanSpecs.json</ParameterScan -->   <!-- code for parameter scan -->
 </Simulation>
