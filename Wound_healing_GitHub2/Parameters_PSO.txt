@@ -1,0 +1,13 @@
+
+actF_col3, 0, 100
+        
+myoF_to_sncF, 0, 100
+        
+proteinase_thr, 1, 50
+      
+Col_myoF_deact, 0, 10
+        
+IL6, 0, 100
+
+CSF_thr, 0, 100
+

@@ -1,0 +1,336 @@
+<CompuCell3D Revision="20200821" Version="4.2.3">
+   
+   <Metadata>
+      
+      <!-- Basic properties simulation -->
+      <NumberOfProcessors>12</NumberOfProcessors>
+      <DebugOutputFrequency>100</DebugOutputFrequency>
+      <!-- <NonParallelModule Name="Potts"/> -->
+   </Metadata>
+   
+   <Potts>
+      
+      <!-- Basic properties of CPM (GGH) algorithm -->
+      <Dimensions x="200" y="200" z="1"/>
+      <Steps>60001</Steps>
+      <Temperature>30.0</Temperature> 
+      <NeighborOrder>2</NeighborOrder>
+      <Boundary_x>NoFlux</Boundary_x>
+      <Boundary_y>NoFlux</Boundary_y>
+      
+   </Potts>
+   
+   <Plugin Name="CellType">
+      
+      <!-- Listing all cell types in the simulation -->
+      <CellType TypeId="0" TypeName="Medium"/>
+      <CellType TypeId="1" TypeName="Fibroblast"/>
+      <CellType TypeId="2" TypeName="Myofibroblast"/>
+      <CellType TypeId="3" TypeName="SncF"/>
+      <CellType TypeId="4" TypeName="SncMyof"/> 
+      <CellType TypeId="5" TypeName="Macrophage"/>
+      <CellType TypeId="6" TypeName="ECM"/> 
+      
+    
+      
+   </Plugin>
+   
+    
+   <Plugin Name="Surface"> 
+   
+   </Plugin>
+   
+   <Plugin Name="Volume">
+        
+   </Plugin>
+
+   
+   <Plugin Name="CenterOfMass">
+      
+      <!-- Module tracking center of mass of each cell -->
+   </Plugin>
+   
+  
+   <Plugin Name="PixelTracker">
+   
+   <!-- Module tracking pixels of each cell -->
+   </Plugin>
+   
+   <Plugin Name="Contact">
+       <!-- Specification of adhesion energies -->
+       <!-- the higher it is the more the cell repel each other -->
+       <Energy Type1="Medium" Type2="Medium">0</Energy>
+       <Energy Type1="Medium" Type2="Fibroblast">1.0</Energy>
+       <Energy Type1="Medium" Type2="Myofibroblast">-1.0</Energy>
+       <Energy Type1="Medium" Type2="SncF">-1.0</Energy>
+       <Energy Type1="Medium" Type2="Macrophage">-2.0</Energy>
+       <Energy Type1="Medium" Type2="SncMyof">-1.0</Energy>
+       <Energy Type1="Medium" Type2="ECM">-1.0</Energy>
+       
+       <Energy Type1="Fibroblast" Type2="Fibroblast">2.0</Energy> 
+       <Energy Type1="Fibroblast" Type2="Myofibroblast">1.0</Energy>
+       <Energy Type1="Fibroblast" Type2="SncF">-1.0</Energy>
+       <Energy Type1="Fibroblast" Type2="Macrophage">-1.0</Energy>
+       <Energy Type1="Fibroblast" Type2="SncMyof">2.0</Energy>
+       <Energy Type1="Fibroblast" Type2="ECM">1.0</Energy>
+       
+       <Energy Type1="Myofibroblast" Type2="Myofibroblast">1.0</Energy>
+       <Energy Type1="Myofibroblast" Type2="SncF">-1.0</Energy>
+       <Energy Type1="Myofibroblast" Type2="Macrophage">-1.0</Energy>
+       <Energy Type1="Myofibroblast" Type2="SncMyof">-1.0</Energy>
+       <Energy Type1="Myofibroblast" Type2="ECM">1.0</Energy>
+       
+       <Energy Type1="SncF" Type2="SncF">5.0</Energy>
+       <Energy Type1="SncF" Type2="Macrophage">1.0</Energy>
+       <Energy Type1="SncF" Type2="SncMyof">1.0</Energy>
+       <Energy Type1="SncF" Type2="ECM">1.0</Energy>
+       
+       <Energy Type1="Macrophage" Type2="Macrophage">2.0</Energy>
+       <Energy Type1="Macrophage" Type2="SncMyof">-1.0</Energy>
+       <Energy Type1="Macrophage" Type2="ECM">1.0</Energy>
+       
+       <Energy Type1="SncMyof" Type2="SncMyof">5.0</Energy>
+       <Energy Type1="SncMyof" Type2="ECM">1.0</Energy>
+       
+       <Energy Type1="ECM" Type2="ECM">-2.0</Energy>
+
+
+       <NeighborOrder>1</NeighborOrder>
+   </Plugin>
+   
+       
+<!--
+units:
+diffusion coefficients: voxel^2 / MCS
+decay coefficient: /voxel MCS
+
+
+-->
+   
+    <Steppable Type="DiffusionSolverFE">
+
+        <!-- Specification of PDE solvers -->
+        
+
+        <DiffusionField Name="Proteinase">
+            <DiffusionData>
+                <FieldName>Proteinase</FieldName>
+                
+                <GlobalDiffusionConstant id = "Proteinase_dc">1.8</GlobalDiffusionConstant> 
+                
+                <GlobalDecayConstant id = "Proteinase_decay">0.045</GlobalDecayConstant> 
+                
+
+            </DiffusionData>
+            <SecretionData>
+                
+            </SecretionData>
+            <BoundaryConditions>
+                <Plane Axis="X">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+                <Plane Axis="Y">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+                <Plane Axis="Z">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+            </BoundaryConditions>
+        </DiffusionField>
+        
+        <DiffusionField Name="PDGF">
+            <DiffusionData>
+                <FieldName>PDGF</FieldName>
+                
+                <GlobalDiffusionConstant id = "PDGF_dc">4</GlobalDiffusionConstant> 
+                
+                <GlobalDecayConstant id = "PDGF_decay">6.25e-4</GlobalDecayConstant>
+                
+
+            </DiffusionData>
+            <SecretionData>
+                
+            </SecretionData>
+            <BoundaryConditions>
+                <Plane Axis="X">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+                <Plane Axis="Y">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+                <Plane Axis="Z">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+            </BoundaryConditions>
+        </DiffusionField>
+
+        
+        
+        
+        <DiffusionField Name="Inflammation_signal">
+            <DiffusionData>
+                <FieldName>Inflammation_signal</FieldName>
+                
+                <GlobalDiffusionConstant id = "Inflammation_signal_dc">4</GlobalDiffusionConstant> 
+                
+                <GlobalDecayConstant id = "Inflammation_signal_decay">6.25e-4</GlobalDecayConstant>
+                
+                
+                
+
+            </DiffusionData>
+            <SecretionData>
+                
+                
+            </SecretionData>
+            <BoundaryConditions>
+                <Plane Axis="X">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+                <Plane Axis="Y">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+                <Plane Axis="Z">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+            </BoundaryConditions>
+        </DiffusionField>
+        
+        <DiffusionField Name="CSF">
+            <DiffusionData>
+                <FieldName>CSF</FieldName>
+                
+                <GlobalDiffusionConstant id = "CSF_dc">1.5</GlobalDiffusionConstant> 
+                
+                <GlobalDecayConstant id = "CSF_decay">6.25e-4</GlobalDecayConstant>
+                
+                
+            </DiffusionData>
+            <SecretionData>
+                
+                
+                
+            </SecretionData>
+            <BoundaryConditions>
+                <Plane Axis="X">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+                <Plane Axis="Y">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+                <Plane Axis="Z">
+                <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+                <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+                </Plane>
+
+            </BoundaryConditions>
+        </DiffusionField>
+        
+        
+        
+      
+
+    </Steppable> 
+    
+    
+   <Plugin Name="Secretion">
+   
+   
+   </Plugin>
+   
+   <Plugin Name="NeighborTracker">
+   
+   
+   </Plugin>
+   
+   
+
+    <Plugin Name="Chemotaxis">
+   
+       
+       <ChemicalField Name="PDGF">
+          
+       </ChemicalField>
+       
+       
+       
+       <ChemicalField Name="Inflammation_signal">
+          
+       </ChemicalField>
+    </Plugin>
+
+    
+    <Plugin Name="ExternalPotential">
+   
+   
+    </Plugin>
+    
+    <Plugin Name="BoundaryPixelTracker">
+   
+        <NeighborOrder>1</NeighborOrder>
+    </Plugin>
+
+    <Plugin Name="Connectivity">
+       
+       <Penalty>10000000</Penalty>
+    </Plugin>
+
+    <Steppable Type="UniformInitializer">
+       <Region>
+          <BoxMin x= "0" y= "0" z="0"/>
+          <BoxMax x="50" y="200" z="1"/>
+          <Gap>0</Gap>
+          <Width>4.6</Width>
+          <Types>Fibroblast,Fibroblast,ECM</Types> 
+       </Region>
+       <Region>
+          <BoxMin x= "150" y= "0" z="0"/>
+          <BoxMax x="200" y="200" z="1"/>
+          <Gap>0</Gap>
+          <Width>4.6</Width>
+          <Types>Fibroblast,Fibroblast,ECM</Types> 
+       </Region>
+       <Region>
+          <BoxMin x= "50" y= "0" z="0"/>
+          <BoxMax x="150" y="50" z="1"/>
+          <Gap>0</Gap>
+          <Width>4.6</Width>
+          <Types>Fibroblast,Fibroblast,ECM</Types> 
+       </Region>
+       <Region>
+          <BoxMin x="50" y= "50" z="0"/>
+          <BoxMax x="150" y="200" z="1"/>
+          <Gap>12</Gap>
+          <Width>6</Width>
+          <Types>Macrophage</Types> 
+       </Region>
+
+       
+       
+    </Steppable>
+   
+
+   
+</CompuCell3D>
