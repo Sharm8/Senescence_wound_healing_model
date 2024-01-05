@@ -235,8 +235,18 @@ class MechanismsSteppable(SteppableBasePy):
                                             cell.lambdaSurface = 2.0
                                             Inflammation_value = max(0, (Inflammation_value - param.IL6))
                                             cell.dict['snc_start'] = mcs                    
-                                            cell.dict['snc_mech'] = 'PARA'    
-                
+                                            cell.dict['snc_mech'] = 'PARA'
+                               # chronic wound model (ageing)             
+                               #elif neighbor_tuple[0] and neighbor_tuple[0].type == self.SNCF:
+                                    #if Inflammation_value > 0:
+                                        #cell.type = self.SNCMYOF
+                                        #cell.targetVolume = param.Sncmyof_TarVol 
+                                        #cell.lambdaVolume = 2.0 
+                                        #cell.targetSurface = param.Sncmyof_TarSur 
+                                        #cell.lambdaSurface = 2.0
+                                        #Inflammation_value = max(0, (Inflammation_value - param.IL6))
+                                        #cell.dict['snc_start'] = mcs                    
+                                        #cell.dict['snc_mech'] = 'PARA' 
                 
                 # cell speed in simulation ###
                 
@@ -530,7 +540,7 @@ class PlotsSteppable(SteppableBasePy):
             num_Fibroblast = len(num_wound_fib_list)
             num_Myofibroblast = len(self.cell_list_by_type(self.MYOFIBROBLAST))    
             num_Macrophage = len(self.cell_list_by_type(self.MACROPHAGE))
-            num_Sncmyof = len(self.cell_list_by_type(self.SNCMYOF))
+            num_Sncmyof = len(self.cell_list_by_type(self.SNCMYOF)) # chronic wound model (ageing): num_Sncmyof = len(self.cell_list_by_type(self.SNCMYOF)) + len(self.cell_list_by_type(self.SNCF))
             #num_wound_fib = len(num_wound_fib_list) 
             num_ECM = len(num_ECM_list)
             
@@ -784,7 +794,7 @@ class ClearSteppable(SteppableBasePy):
                             field_Proteinase[cell.xCOM,cell.yCOM,cell.zCOM] = max(0, (field_Proteinase[cell.xCOM,cell.yCOM,cell.zCOM] - param.proteinase_thr))
                     
                     # Senescent cell clearance
-                    if cell.type == self.SNCMYOF or cell.type == self.SNCF:
+                    if cell.type == self.SNCMYOF:
                         neighbor_list = self.get_cell_neighbor_data_list(cell)
                         common_area_with_mac = neighbor_list.common_surface_area_with_cell_types(cell_type_list=[self.MACROPHAGE])
                         chance = random.randint(1, 100)
@@ -799,7 +809,15 @@ class ClearSteppable(SteppableBasePy):
                             # other clearance mechanisms 
                             if field_Inflammation_signal[cell.xCOM,cell.yCOM,cell.zCOM] > param.IL6*2:
                                 self.delete_cell(cell) 
-                    
+
+                    # code for chronic wound (ageing)
+                   # if cell.type == self.SNCF:
+                        #neighbor_list = self.get_cell_neighbor_data_list(cell)
+                        #common_area_with_mac = neighbor_list.common_surface_area_with_cell_types(cell_type_list=[self.MACROPHAGE])
+                        #if common_area_with_mac > 0 and field_Inflammation_signal[cell.xCOM,cell.yCOM,cell.zCOM] > param.IL6*2:
+                            #self.delete_cell(cell)
+
+                
                 # macrophage clearance during late-stage healing                
                 if mcs > 55000:
                     for cell in self.cell_list_by_type(self.MACROPHAGE):
