@@ -303,21 +303,21 @@ decay coefficient: /voxel MCS
           <BoxMax x="50" y="200" z="1"/>
           <Gap>0</Gap>
           <Width>4.6</Width>
-          <Types>Fibroblast,Fibroblast,ECM</Types> 
+          <Types>Fibroblast,Fibroblast,ECM</Types>      <!-- for chronic wound model:  <Types>Fibroblast,Fibroblast,ECM,SncF</Types> -->
        </Region>
        <Region>
           <BoxMin x= "150" y= "0" z="0"/>
           <BoxMax x="200" y="200" z="1"/>
           <Gap>0</Gap>
           <Width>4.6</Width>
-          <Types>Fibroblast,Fibroblast,ECM</Types> 
+          <Types>Fibroblast,Fibroblast,ECM</Types>       <!-- for chronic wound model:  <Types>Fibroblast,Fibroblast,ECM,SncF</Types> -->
        </Region>
        <Region>
           <BoxMin x= "50" y= "0" z="0"/>
           <BoxMax x="150" y="50" z="1"/>
           <Gap>0</Gap>
           <Width>4.6</Width>
-          <Types>Fibroblast,Fibroblast,ECM</Types> 
+          <Types>Fibroblast,Fibroblast,ECM</Types>      <!-- for chronic wound model:  <Types>Fibroblast,Fibroblast,ECM,SncF</Types> -->
        </Region>
        <Region>
           <BoxMin x="50" y= "50" z="0"/>
